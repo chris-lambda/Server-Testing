@@ -60,17 +60,30 @@ describe('server', () => {
 
     describe('/names delete route', () => {
         it('returns status 200 when delete is succesful', async () => {
-            const response = await request(server).delete('/names').send({index: 0});
+            
+            let response = await request(server).get('/names');
+
+            const length = response.body.length;
+            
+            response = await request(server).delete('/names').send({index: length-1});
 
             expect(response.status).toEqual(200)
         });
         
         it('should return 404 if index cant be found', async () => {
+            let response = await request(server).get('/names');
 
+            const length = response.body.length;
+            
+            response = await request(server).delete('/names').send({index: length+1});
+
+            expect(response.status).toEqual(404);
         });
 
         it('should return 400 if index is not provided', () => {
-            
+            response = await request(server).delete('/names').send({});
+
+            expect(response.status).toEqual(400);
         });
 
         // return 200 on succesful delete
