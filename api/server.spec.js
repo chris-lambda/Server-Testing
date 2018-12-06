@@ -62,10 +62,9 @@ describe('server', () => {
         it('returns status 200 when delete is succesful', async () => {
             
             let response = await request(server).get('/names');
+            const index = response.body.length - 1;
 
-            const length = response.body.length;
-            
-            response = await request(server).delete('/names').send({index: length-1});
+            response = await request(server).delete('/names').send({index: index});
 
             expect(response.status).toEqual(200)
         });
@@ -80,7 +79,7 @@ describe('server', () => {
             expect(response.status).toEqual(404);
         });
 
-        it('should return 400 if index is not provided', () => {
+        it('should return 400 if index is not provided', async () => {
             response = await request(server).delete('/names').send({});
 
             expect(response.status).toEqual(400);
